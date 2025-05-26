@@ -1,0 +1,19 @@
+http:
+  routers:
+    synology:
+      service: synology
+      rule: Host(`synology.mikesageek.com`)
+    home-assistant:
+      service: home-assistant
+      rule: Host(`homeassistant.mikesageek.com`)
+
+  # Add the service
+  services:
+    home-assistant:
+      loadBalancer:
+        servers:
+          - url: http://homeassistant.local:8123/
+    synology:
+      loadBalancer:
+        servers:
+          - url: http://192.168.1.43:5000/

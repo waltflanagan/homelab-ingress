@@ -1,0 +1,46 @@
+[env]
+SOPS_AGE_KEY_FILE = "{{ env.HOME }}/.config/sops/homelab.age"
+MISE_SOPS_AGE_KEY_FILE = "{{ env.HOME }}/.config/sops/homelab.age"
+_.file = ".env.yaml"
+SERVICE_ROOT = "{{ config_root }}"
+TRAEFIK_HOST = 'laptop'
+
+
+[tasks."decrypt:certs"]
+run = [
+  'sops decrypt --output ingress/traefik/acme/acme.json ingress/traefik/acme.enc.json && chmod 600 ingress/traefik/acme/acme.json'
+]
+
+[tasks."encrypt:certs"]
+run = [
+  'sops encrypt --output ingress/traefik/acme.enc.json ingress/traefik/acme/acme.json'
+]
+
+[tasks."decrypt:secrets"]
+run = [
+  'mkdir -p ingress/secrets && echo ${CF_DNS_API_KEY} > ingress/secrets/CF_DNS_API_KEY.secret',
+]
+
+[tasks."deploy:m4"]
+
+run = [
+  'docker compose up -d'
+]
+
+[tasks."deploy:m1"]
+run = [
+  'docker compose up -d'
+]
+
+[tasks."deploy:laptop"]
+run = [
+  'docker compose up -d'
+]
+
+
+[settings]
+experimental=true
+
+[tools]
+age = "latest"
+sops = "latest"

@@ -1,0 +1,10 @@
+http:
+  middlewares:
+    sablier-minecraft:
+      plugin:
+        sablier:
+          sablierUrl: http://sablier:10000
+          sessionDuration: 30m
+          names: minecraft-nigel, minecraft-creative, minecraft-lobby
+          blocking:
+            defaultTimeout: 90s

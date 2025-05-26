@@ -1,0 +1,9 @@
+tls:
+stores:
+  default:
+    defaultGeneratedCert:
+      resolver: cloudflare
+      domain:
+        main: dev.mikesageek.com
+        sans:
+          - "*.dev.mikesageek.com"

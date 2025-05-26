@@ -1,0 +1,41 @@
+name: ingress
+services:
+  traefik:
+    image: traefik:v3.3
+    container_name: traefik
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - 80:80
+      - 443:443
+      - 8080:8080
+    secrets:
+      - cf-token
+    environment:
+      - CF_DNS_API_TOKEN_FILE=/run/secrets/cf-token
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - $SERVICE_ROOT/traefik/acme:/acme
+      - $SERVICE_ROOT/traefik/rules/${TRAEFIK_HOST}:/rules
+      - $SERVICE_ROOT/traefik/traefik.yml:/etc/traefik/traefik.yml
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=Host(`${TRAEFIK_HOST}.ingress.mikesageek.com`)"
+      - "traefik.http.routers.traefik.entrypoints=https"
+      - "traefik.http.services.traefik.loadbalancer.server.port=8080"
+      - "traefik.http.routers.traefik.service=traefik"
+      - "traefik.http.routers.traefik.tls.certresolver=cloudflare"
+
+  sablier:
+    image: sablierapp/sablier:1.9.0
+    command:
+      - start
+      - --provider.name=docker # or swarm
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+secrets:
+  cf-token:
+    file: secrets/CF_DNS_API_KEY.secret
