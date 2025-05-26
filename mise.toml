@@ -8,17 +8,17 @@ TRAEFIK_HOST = 'laptop'
 
 [tasks."decrypt:certs"]
 run = [
-  'sops decrypt --output ingress/traefik/acme/acme.json ingress/traefik/acme.enc.json && chmod 600 ingress/traefik/acme/acme.json'
+  'sops decrypt --output traefik/acme/acme.json traefik/acme.enc.json && chmod 600 traefik/acme/acme.json'
 ]
 
 [tasks."encrypt:certs"]
 run = [
-  'sops encrypt --output ingress/traefik/acme.enc.json ingress/traefik/acme/acme.json'
+  'sops encrypt --output traefik/acme.enc.json traefik/acme/acme.json'
 ]
 
 [tasks."decrypt:secrets"]
 run = [
-  'mkdir -p ingress/secrets && echo ${CF_DNS_API_KEY} > ingress/secrets/CF_DNS_API_KEY.secret',
+  'mkdir -p secrets && echo ${CF_DNS_API_KEY} > secrets/CF_DNS_API_KEY.secret',
 ]
 
 [tasks."deploy:m4"]
@@ -28,6 +28,7 @@ run = [
 ]
 
 [tasks."deploy:m1"]
+env.TRAEFIK_HOST = 'm1'
 run = [
   'docker compose up -d'
 ]
