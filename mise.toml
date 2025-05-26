@@ -22,7 +22,7 @@ run = [
 ]
 
 [tasks."deploy:m4"]
-
+env.TRAEFIK_HOST = 'm4'
 run = [
   'docker compose up -d'
 ]
