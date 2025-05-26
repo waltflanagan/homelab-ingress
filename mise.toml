@@ -3,8 +3,6 @@ SOPS_AGE_KEY_FILE = "{{ env.HOME }}/.config/sops/homelab.age"
 MISE_SOPS_AGE_KEY_FILE = "{{ env.HOME }}/.config/sops/homelab.age"
 _.file = ".env.yaml"
 SERVICE_ROOT = "{{ config_root }}"
-TRAEFIK_HOST = 'laptop'
-
 
 [tasks."decrypt:certs"]
 run = [
@@ -19,23 +17,6 @@ run = [
 [tasks."decrypt:secrets"]
 run = [
   'mkdir -p secrets && echo ${CF_DNS_API_KEY} > secrets/CF_DNS_API_KEY.secret',
-]
-
-[tasks."deploy:m4"]
-env.TRAEFIK_HOST = 'm4'
-run = [
-  'docker compose up -d'
-]
-
-[tasks."deploy:m1"]
-env.TRAEFIK_HOST = 'm1'
-run = [
-  'docker compose up -d'
-]
-
-[tasks."deploy:laptop"]
-run = [
-  'docker compose up -d'
 ]
 
 

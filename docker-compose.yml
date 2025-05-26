@@ -20,11 +20,11 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - $SERVICE_ROOT/traefik/acme:/acme
-      - $SERVICE_ROOT/traefik/rules/${TRAEFIK_HOST}:/rules
+      - $SERVICE_ROOT/traefik/rules/${HOMELAB_HOST}:/rules
       - $SERVICE_ROOT/traefik/traefik.yml:/etc/traefik/traefik.yml
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.traefik.rule=Host(`ingress.${TRAEFIK_HOST}.mikesageek.com`)"
+      - "traefik.http.routers.traefik.rule=Host(`ingress.${HOMELAB_HOST}.mikesageek.com`)"
       - "traefik.http.services.traefik.loadbalancer.server.port=8080"
       - "traefik.http.routers.traefik.tls.certresolver=cloudflare"
 
