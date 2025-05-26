@@ -4,7 +4,7 @@ services:
     image: traefik:v3.3
     container_name: traefik
     restart: unless-stopped
-    networks: 
+    networks:
       - ingress
     security_opt:
       - no-new-privileges:true
@@ -24,7 +24,7 @@ services:
       - $SERVICE_ROOT/traefik/traefik.yml:/etc/traefik/traefik.yml
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.traefik.rule=Host(`${TRAEFIK_HOST}.ingress.mikesageek.com`)"
+      - "traefik.http.routers.traefik.rule=Host(`ingress.${TRAEFIK_HOST}.mikesageek.com`)"
       - "traefik.http.services.traefik.loadbalancer.server.port=8080"
       - "traefik.http.routers.traefik.tls.certresolver=cloudflare"
 
