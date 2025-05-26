@@ -4,6 +4,8 @@ services:
     image: traefik:v3.3
     container_name: traefik
     restart: unless-stopped
+    networks: 
+      - ingress
     security_opt:
       - no-new-privileges:true
     ports:
@@ -23,13 +25,12 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.traefik.rule=Host(`${TRAEFIK_HOST}.ingress.mikesageek.com`)"
-      - "traefik.http.routers.traefik.entrypoints=https"
       - "traefik.http.services.traefik.loadbalancer.server.port=8080"
-      - "traefik.http.routers.traefik.service=traefik"
       - "traefik.http.routers.traefik.tls.certresolver=cloudflare"
 
   sablier:
     image: sablierapp/sablier:1.9.0
+    container_name: sablier
     command:
       - start
       - --provider.name=docker # or swarm
@@ -39,3 +40,8 @@ services:
 secrets:
   cf-token:
     file: secrets/CF_DNS_API_KEY.secret
+
+networks:
+  ingress:
+    name: ingress
+    driver: bridge
